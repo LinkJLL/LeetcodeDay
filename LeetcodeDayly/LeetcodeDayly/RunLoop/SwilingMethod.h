@@ -22,4 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SonSwilingMethod (Mehod)
 
 @end
+
+@interface OCParent : NSObject
+
+@end
+@interface OCSon : OCParent
+
+@end
 NS_ASSUME_NONNULL_END

@@ -37,3 +37,15 @@
 }
 
 @end
+
+
+@implementation OCParent
+
++(void)initialize{
+    NSLog(@"这是父类%s",__func__);
+}
+
+@end
+@implementation OCSon
+
+@end

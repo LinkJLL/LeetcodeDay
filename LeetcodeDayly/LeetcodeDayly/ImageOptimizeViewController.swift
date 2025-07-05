@@ -12,7 +12,7 @@ class CellModel: NSObject {
     var filePath : String?
 }
 
-class ImageOptimizeViewController: UIViewController {
+class ImageOptimizeViewController: UIViewController, AsyncLearnDelegate {
 
     
     var downloadTask : (()->Void)?
@@ -24,7 +24,7 @@ class ImageOptimizeViewController: UIViewController {
     var fpsCount : Int = 0
     var link : CADisplayLink!
     var lastTime :TimeInterval = 0
-    
+    var learn : AsyncLearn?
     var datalists : [CellModel] = []
     
     override func viewDidLoad() {
@@ -32,7 +32,6 @@ class ImageOptimizeViewController: UIViewController {
         
         let son = SonSwilingMethod.init()
         son.parentMethod()
-        
 //        let parant = SwilingMethod.init()
 //        parant.parentMethod()
         
