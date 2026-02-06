@@ -12,6 +12,21 @@ class ViewController: UIViewController, AsyncLearnDelegate {
     var learn : AsyncLearn?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        February_5().constructTransformedArray([3,-2,1,1])
+        
+        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        let popupView = GradientBorderView()
+//        popupView.backgroundColor = UIColor.orange.withAlphaComponent(0.6)
+        popupView.frame = CGRectMake(40, 100, 250, 150)
+        view.addSubview(popupView)
+//        popupView.snp.makeConstraints { make in
+//            make.center.equalToSuperview()
+//            make.width.equalTo(250)
+//            make.height.equalTo(150)
+//        }
+        
+        
         // Do any additional setup after loading the view.
 //        let dummy = NSMutableArray()
 //        let v = TestView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
@@ -90,3 +105,66 @@ enum TestEnum: String {
     case two
 }
 
+
+
+class GradientBorderView: UIView {
+    
+    private let gradientLayer = CAGradientLayer()
+    private let borderLayer = CAShapeLayer()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupGradientBorder()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupGradientBorder()
+    }
+    
+    private func setupGradientBorder() {
+        backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        layer.cornerRadius = 18
+        layer.masksToBounds = true
+        
+        // 🎨 渐变方向：左上 → 右下
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint   = CGPoint(x: 1, y: 1)
+        
+        // 🎨 调整颜色 & 透明度分布
+        //   左上 亮（40%）
+        //   中间 透明（0%）
+        //   右下 微光（10%）
+        gradientLayer.colors = [
+            UIColor.white.withAlphaComponent(0.4).cgColor,  // 左上
+            UIColor.white.withAlphaComponent(0.0).cgColor, // 过渡
+            UIColor.white.withAlphaComponent(0.0).cgColor,  // 中间
+            UIColor.white.withAlphaComponent(0.1).cgColor   // 右下
+        ]
+        gradientLayer.locations = [0.0, 0.41, 0.57, 1.0]
+        
+        layer.addSublayer(gradientLayer)
+        
+        // 🎨 边框路径（不再用 mask，会削弱亮度）
+        borderLayer.lineWidth = 1
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.white.cgColor
+        borderLayer.lineCap = .round
+        
+        layer.addSublayer(borderLayer)
+        
+        // ✅ 将渐变直接显示在边框线条上
+        gradientLayer.mask = borderLayer
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = bounds
+        
+        let path = UIBezierPath(
+            roundedRect: bounds.insetBy(dx: 1, dy: 1),
+            cornerRadius: layer.cornerRadius
+        )
+        borderLayer.path = path.cgPath
+    }
+}
